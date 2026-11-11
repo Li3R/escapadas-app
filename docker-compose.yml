@@ -1,0 +1,24 @@
+services:
+  # 1. BASE DE DATOS
+  db:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+  # 2. WEB
+  webapp:
+    build: ./webapp
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://db:27017/
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - db
+  # 3. WORKER
+  worker:
+    build: ./worker
+    environment:
+      - MONGO_URI=mongodb://db:27017/
+    depends_on:
+      - db

@@ -1,0 +1,3 @@
+# Librerias de python necesarias para [worker]
+pymongo==4.6.1
+requests==2.31.0
