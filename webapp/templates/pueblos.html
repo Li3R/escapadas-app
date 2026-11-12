@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pueblos</title>
+</head>
+<body>
+    <a href="/">Inicio</a>
+    <h1>Lista de pueblos</h1>
+    <ul>
+        {% for pueblo in pueblos %}
+            <li>{{ pueblo.properties.nombre or pueblo.properties.Nombre or pueblo.properties.name or pueblo.properties.Name or pueblo.properties }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

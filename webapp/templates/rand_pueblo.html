@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>¡Deja que elijamos tu destino esta vez!</title>
+</head>
+<body>
+    <a href="/">Inicio</a>
+    <h1>¿Dónde viajamos hoy?</h1>
+
+    <form method="POST">
+        <button type="submit">Generar pueblo aleatorio</button>
+    </form>
+    <h2>Pueblo al que irás hoy:</h2>
+    {% if pueblo %}
+        <ul>
+            <li>{{ pueblo.properties.nombre or pueblo.properties.Nombre or pueblo.properties.name or pueblo.properties.Name }}</li>
+        </ul>
+    {% endif %}
+</body>
+</html>
