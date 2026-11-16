@@ -1,13 +1,47 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>ESCAPADAS</title>
-</head>
-<body>
-    <h1>Bienvenido a la web que te genera viajes aleatorios para pasar el fin de semana por España.</h1>
-    <a href="/listar_pueblos">Lista de pueblos</a>
-    <a href="/pueblo_random">Deja que elijamos este viaje por ti</a>
-    <a href="/pueblos_en_distancia_maxima">Lista de pueblos mas cercanos al limite de KMs elegidos</a>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}ESCAPADAS - Inicio{% endblock %}
+
+{% block content %}
+<section class="grid" style="align-items: center; gap: 2rem; padding: 1.5rem 0 2.5rem 0;">
+    <div>
+        <img src="{{ url_for('static', filename='images/ronda.jpg') }}"
+             alt="Vista de Ronda"
+             style="width: 100%; max-height: 440px; object-fit: cover; border-radius: var(--pico-border-radius); display: block;">
+    </div>
+
+    <div>
+        <h1>Bienvenido a la web que te genera viajes aleatorios para pasar el fin de semana por España.</h1>
+        <p style="color: var(--pico-muted-color); margin-bottom: 1.5rem;">
+            Descubre los pueblos más bonitos de España, consulta el tiempo actual en cada destino o deja que el azar decida tu próxima ruta.
+        </p>
+        <a href="/pueblo_random" role="button">Deja que elijamos este viaje por ti</a>
+    </div>
+</section>
+
+<div class="grid">
+    <article>
+        <header><strong>Explorar destinos</strong></header>
+        <p>Consulta el listado completo con todos los pueblos disponibles.</p>
+        <footer>
+            <a href="/listar_pueblos" role="button" class="outline" style="width: 100%;">Lista de pueblos</a>
+        </footer>
+    </article>
+
+    <article>
+        <header><strong>Búsqueda por distancia</strong></header>
+        <p>Encuentra destinos próximos a tu ubicación actual.</p>
+        <footer>
+            <a href="/pueblos_mas_cercanos" role="button" class="secondary" style="width: 100%;">Lista de pueblos más cercanos al límite de KMs elegidos</a>
+        </footer>
+    </article>
+
+    <article>
+        <header><strong>Los más populares</strong></header>
+        <p>Descubre qué destinos están visitando más otros usuarios.</p>
+        <footer>
+            <a href="/top_pueblos" role="button" class="contrast" style="width: 100%;">Top 5 pueblos más visitados</a>
+        </footer>
+    </article>
+</div>
+{% endblock %}

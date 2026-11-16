@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Pueblos cercanos - ESCAPADAS{% endblock %}
+
+{% block content %}
+<header style="margin-bottom: 1.5rem;">
+    <h1>Pueblos más cercanos</h1>
+    <p id="estado-gps" aria-busy="true">Obteniendo ubicación...</p>
+</header>
+
+<article>
+    <form method="POST">
+        <input type="hidden" id="lat" name="lat">
+        <input type="hidden" id="long" name="long">
+
+        <label for="km">Kilómetros máximos, cercanos a mi posición:</label>
+        <fieldset role="group">
+            <input type="number" id="km" name="km" value="100" min="1" required>
+            <button type="submit" id="btn-buscar" disabled>Buscar pueblos</button>
+        </fieldset>
+    </form>
+</article>
+
+{% if pueblos is not none %}
+    <section style="margin-top: 2rem;">
+        <h2>Resultados ({{ pueblos|length }})</h2>
+        {% if pueblos %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
+                {% for pueblo in pueblos %}
+                    <article style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <a href="/pueblo/{{ pueblo.properties.slug }}">
+                                <strong>{{ pueblo.properties.nombre }}</strong>
+                            </a>
+                        </div>
+                        {% if pueblo.temperatura is defined %}
+                            <small style="margin-top: 0.5rem; color: var(--pico-muted-color);">
+                                Temperatura actual: {{ pueblo.temperatura }} °C
+                            </small>
+                        {% endif %}
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <article>
+                <p style="margin-bottom: 0;">No hay pueblos en esa distancia.</p>
+            </article>
+        {% endif %}
+    </section>
+{% endif %}
+
+<script>
+    const estadoGps = document.getElementById("estado-gps");
+
+    navigator.geolocation.getCurrentPosition(
+        position => {
+            const { latitude, longitude } = position.coords;
+            document.getElementById("lat").value = latitude;
+            document.getElementById("long").value = longitude;
+            estadoGps.removeAttribute("aria-busy");
+            estadoGps.textContent = "Ubicación lista.";
+            document.getElementById("btn-buscar").disabled = false;
+        },
+        error => {
+            estadoGps.removeAttribute("aria-busy");
+            estadoGps.textContent = "No se pudo obtener la ubicación: " + error.message;
+        }
+    );
+</script>
+{% endblock %}

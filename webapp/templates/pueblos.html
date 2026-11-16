@@ -1,16 +1,27 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Pueblos</title>
-</head>
-<body>
-    <a href="/">Inicio</a>
+{% extends "base.html" %}
+
+{% block title %}Lista de pueblos - ESCAPADAS{% endblock %}
+
+{% block content %}
+<header style="margin-bottom: 1.5rem;">
     <h1>Lista de pueblos</h1>
-    <ul>
-        {% for pueblo in pueblos %}
-            <li>{{ pueblo.properties.nombre or pueblo.properties.Nombre or pueblo.properties.name or pueblo.properties.Name or pueblo.properties }}</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+    <p>{{ pueblos|length }} destinos disponibles para tu próxima escapada.</p>
+</header>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
+    {% for pueblo in pueblos %}
+        <article style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <a href="/pueblo/{{ pueblo.properties.slug }}">
+                    <strong>{{ pueblo.properties.nombre }}</strong>
+                </a>
+            </div>
+            {% if pueblo.temperatura is defined %}
+                <small style="margin-top: 0.5rem; color: var(--pico-muted-color);">
+                    Temperatura actual: {{ pueblo.temperatura }} °C
+                </small>
+            {% endif %}
+        </article>
+    {% endfor %}
+</div>
+{% endblock %}

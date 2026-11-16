@@ -31,6 +31,53 @@ def pueblo_random():
             return f"Error al cargar el pueblo: {e}", 500
 
     return render_template("rand_pueblo.html", pueblo=pueblo_db)
+    
+@app.route("/pueblos_mas_cercanos", methods=["GET", "POST"])
+def pueblos_mas_cercanos():
+    pueblos_db = None
+    if request.method == "POST":
+        try:
+            lat = float(request.form.get("lat"))
+            long = float(request.form.get("long"))
+            km = float(request.form.get("km"))
+
+            masCercanos = {
+                "geometry": {
+                    "$near": {
+                        "$geometry": {
+                            "type": "Point",
+                            "coordinates": [long, lat]
+                        },
+                        "$maxDistance": km * 1000,
+                        "$minDistance": 0
+                    }
+                }
+            }
+            pueblos_db = list(collection.find(masCercanos, {"_id": 0}))
+        except Exception as e:
+            return f"Error al cargar los pueblos más cercanos: {e}", 500
+
+    return render_template("pueblos_cercanos.html", pueblos=pueblos_db)
+    
+@app.route("/pueblo/<slug>")
+def detalle_pueblo(slug):
+    pueblo_db = collection.find_one({"properties.slug": slug}, {"_id": 0})
+    if not pueblo_db:
+        return "Pueblo no encontrado", 404
+
+    db["visitas"].insert_one({
+        "slug": slug,
+        "procesado": False
+    })
+
+    return render_template("detalle_pueblo.html", pueblo=pueblo_db)
+
+
+@app.route("/top_pueblos")
+def top_pueblos():
+    doc = db["estadisticas"].find_one({"_id": "top_5"})
+    ranking = doc["ranking"] if doc else []
+    return render_template("top_pueblos.html", ranking=ranking)
         
 @app.route('/')
 def show_template():

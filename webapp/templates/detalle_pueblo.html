@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}{{ pueblo.properties.nombre }} - ESCAPADAS{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{% endblock %}
+
+{% block content %}
+<header style="margin-bottom: 1.5rem;">
+    <h1>{{ pueblo.properties.nombre }}</h1>
+    <p style="color: var(--pico-muted-color);">
+        {{ pueblo.properties.provincia }} · {{ pueblo.properties.comunidad_autonoma }}
+    </p>
+</header>
+
+{% if pueblo.foto %}
+    <article style="padding: 0; overflow: hidden; margin-bottom: 1.5rem;">
+        <img src="{{ pueblo.foto }}" alt="Foto de {{ pueblo.properties.nombre }}" style="width: 100%; max-height: 420px; object-fit: cover; display: block;">
+    </article>
+{% endif %}
+
+{% if pueblo.descripcion %}
+    <article>
+        <p style="margin-bottom: 0;">{{ pueblo.descripcion }}</p>
+    </article>
+{% endif %}
+
+<div class="grid">
+    <article style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <header><strong>Datos del municipio</strong></header>
+            <table>
+                <tbody>
+                    <tr>
+                        <th scope="row">Provincia</th>
+                        <td>{{ pueblo.properties.provincia }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Comunidad Autónoma</th>
+                        <td>{{ pueblo.properties.comunidad_autonoma }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Población</th>
+                        <td>{{ pueblo.properties.poblacion }} habitantes</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Altitud</th>
+                        <td>{{ pueblo.properties.altitud_m }} m</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Certificado desde</th>
+                        <td>{{ pueblo.properties.certificado_desde }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Temperatura actual</th>
+                        <td>
+                            {% if pueblo.temperatura is defined and pueblo.temperatura is not none %}
+                                <strong>{{ pueblo.temperatura }} °C</strong>
+                            {% else %}
+                                <small style="color: var(--pico-muted-color);">Pendiente de actualizar</small>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {% if pueblo.properties.url %}
+            <footer style="margin-top: 1rem;">
+                <a href="{{ pueblo.properties.url }}" target="_blank" role="button" class="outline" style="width: 100%;">Ver ficha oficial</a>
+            </footer>
+        {% endif %}
+    </article>
+
+    <article>
+        <header><strong>Ubicación</strong></header>
+        <div id="mapa" style="height: 360px; width: 100%; border-radius: var(--pico-border-radius);"></div>
+    </article>
+</div>
+
+<div style="margin-top: 1rem;">
+    <a href="/listar_pueblos" role="button" class="secondary outline">← Volver a la lista de pueblos</a>
+</div>
+
+<script>
+    const lat = {{ pueblo.geometry.coordinates[1] }};
+    const lon = {{ pueblo.geometry.coordinates[0] }};
+
+    const mapa = L.map('mapa').setView([lat, lon], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+    }).addTo(mapa);
+
+    L.marker([lat, lon]).addTo(mapa).bindPopup("{{ pueblo.properties.nombre }}").openPopup();
+</script>
+{% endblock %}

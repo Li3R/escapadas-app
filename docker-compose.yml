@@ -4,6 +4,9 @@ services:
     image: mongo:6.0
     ports:
       - "27017:27017"
+    volumes:
+      - mongo_datos:/data/db
+
   # 2. WEB
   webapp:
     build: ./webapp
@@ -15,6 +18,7 @@ services:
       - ./data:/app/data
     depends_on:
       - db
+
   # 3. WORKER
   worker:
     build: ./worker
@@ -22,3 +26,6 @@ services:
       - MONGO_URI=mongodb://db:27017/
     depends_on:
       - db
+
+volumes:
+  mongo_datos:

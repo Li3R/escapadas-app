@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Top 5 pueblos - ESCAPADAS{% endblock %}
+
+{% block content %}
+<header style="margin-bottom: 1.5rem;">
+    <h1>Top 5 pueblos más visitados en nuestra Web</h1>
+    <p>Ranking actualizado automáticamente con los destinos más populares.</p>
+</header>
+
+{% if ranking %}
+    <article>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 90px;">Puesto</th>
+                    <th scope="col">Pueblo</th>
+                    <th scope="col" style="text-align: right;">Visitas</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pueblo in ranking %}
+                    <tr>
+                        <td><strong>#{{ loop.index }}</strong></td>
+                        <td>
+                            <a href="/pueblo/{{ pueblo.properties.slug }}">
+                                <strong>{{ pueblo.properties.nombre }}</strong>
+                            </a>
+                        </td>
+                        <td style="text-align: right;">{{ pueblo.visitas }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </article>
+{% else %}
+    <article>
+        <p>Todavía no hay visitas registradas.</p>
+        <a href="/listar_pueblos" role="button" class="outline">Explorar lista de pueblos</a>
+    </article>
+{% endif %}
+{% endblock %}

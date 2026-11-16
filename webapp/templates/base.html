@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}ESCAPADAS{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        /* Evita que Pico.css distorsione las imágenes internas del mapa Leaflet */
+        .leaflet-container img {
+            max-width: none !important;
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header class="container">
+        <nav>
+            <ul>
+                <li><a href="/"><strong>ESCAPADAS</strong></a></li>
+            </ul>
+            <ul>
+                <li><a href="/listar_pueblos">Pueblos</a></li>
+                <li><a href="/pueblo_random">Aleatorio</a></li>
+                <li><a href="/pueblos_mas_cercanos">Cercanos</a></li>
+                <li><a href="/top_pueblos">Top 5</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
